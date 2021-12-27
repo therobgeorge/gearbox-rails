@@ -9,4 +9,8 @@ Rails.application.routes.draw do
   #sessions
   post "/sessions" => "sessions#create"
 
+  #gear
+  get "/gears" => "gears#index"
+  post "/gears" => "gears#create"
+
 end
