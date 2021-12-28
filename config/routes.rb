@@ -12,5 +12,12 @@ Rails.application.routes.draw do
   #gear
   get "/gears" => "gears#index"
   post "/gears" => "gears#create"
+  get "/gears/:id" => "gears#show"
+  patch "/gears/:id" => "gears#update"
+  delete "gears/:id" => "gears#destroy"
+  
+  #images
+  post "/images" => "images#create"
+  delete "/images/:id" => "images#destroy"
 
 end

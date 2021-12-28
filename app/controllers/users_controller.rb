@@ -39,7 +39,7 @@ class UsersController < ApplicationController
       if user.save
         render json: user
       else
-        render json: { errors: user.errors.full_messages, status: :unprocessable_entity }
+        render json: { errors: user.errors.full_messages}, satus: :unprocessable_entity
       end
     else
       render json: { message: "Not logged in" }
