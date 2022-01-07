@@ -8,22 +8,28 @@ class GearsController < ApplicationController
   end
 
   def create
-    gear = Gear.new(
-      user_id: current_user.id,
-      category: params[:category],
-      make: params[:make],
-      model: params[:model],
-      color: params[:color],
-      serial_number: params[:serial_number],
-      other_info: params[:other_info],
-      missing: false,
-      registered: params[:registered]
-    )
-    if gear.save
-      render json: gear
-    else
-      render json: {errors: gear.errors.full_messages}, status: :unprocessable_entity
+    gear = nil
+    Gear.transaction do
+      gear = Gear.create(
+        user_id: current_user.id,
+        category: params[:category],
+        make: params[:make],
+        model: params[:model],
+        color: params[:color],
+        serial_number: params[:serial_number],
+        other_info: params[:other_info],
+        missing: false,
+        registered: params[:registered],
+      )
+      response = Cloudinary::Uploader.upload(params[:image_base64], resource_type: :auto)
+      cloudinary_url = response["secure_url"]
+
+
+      gear.images.create(photo_url: cloudinary_url)
     end
+    render json: gear
+  rescue
+    render json: {errors: gear.errors.full_messages}, status: :unprocessable_entity
   end
 
   def show
